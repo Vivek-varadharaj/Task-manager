@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/common/models/response_model.dart';
 import 'package:task_manager_app/features/auth/domain/models/login_request_model.dart';
@@ -80,6 +78,11 @@ class AuthController extends ChangeNotifier {
     try {
       await authRepository.saveUserToken(token);
     } catch (e) {}
+  }
+
+  Future<void> loadUser() async {
+    _loginResponseModel = await authRepository.getUser();
+    notifyListeners();
   }
 
   @override

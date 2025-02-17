@@ -1,11 +1,14 @@
 class AppConstants {
   // base url
   static const String appBaseUrl = "https://dummyjson.com";
+  static const String getBaseUrl = "dummyjson.com";
   static const String token = 'token';
 
   // URLS FOR API CALLS
 
   static const String loginUsingPasswordApi = '/auth/login';
+  static const String getTodosApi = '/todos';
+  static const String addTodoApi = '/todos/add';
   static const String homeBannerListApi = '/api/banners';
   static const String productListApi = "/api/products";
   static const String verifyOtpApi = "/api/verify/";

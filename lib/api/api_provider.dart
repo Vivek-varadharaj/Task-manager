@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,14 +54,18 @@ class ApiClient extends ChangeNotifier {
       bool handleError = true}) async {
     try {
       if (kDebugMode) {
-        print('====> API Call: $uri\nHeader: $_mainHeaders');
+        print('====> API Call: $uri\nQuery: $query\nHeader: $_mainHeaders');
       }
+
+      Uri url = Uri.https(AppConstants.getBaseUrl, uri, query);
+
       http.Response response = await http
           .get(
-            Uri.parse(appBaseUrl + uri),
+            url,
             headers: headers ?? _mainHeaders,
           )
           .timeout(Duration(seconds: timeoutInSeconds));
+
       return handleResponse(response, uri, handleError);
     } catch (e) {
       if (kDebugMode) {
@@ -201,9 +206,9 @@ class ApiClient extends ChangeNotifier {
       );
     }
     if (kDebugMode) {
-      print('====> API Response: [${apiResponse.statusCode}] $uri');
+      log('====> API Response: [${apiResponse.statusCode}] $uri');
       if (response.statusCode != 500) {
-        print('${apiResponse.body}');
+        log(apiResponse.body.toString());
       }
     }
     if (handleError) {
