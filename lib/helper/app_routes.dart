@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/features/auth/screens/login_screen.dart';
+import 'package:task_manager_app/features/dashboard/screens/dashboard_screen.dart';
 import 'package:task_manager_app/features/home/screens/home_screen.dart';
 import 'package:task_manager_app/features/splash/screens/splash_screen.dart';
 
@@ -23,6 +24,8 @@ class Routes {
         return MaterialPageRoute(builder: (_) => LoginScreen());
       case home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
+      case dashboard:
+        return MaterialPageRoute(builder: (_) => const DashboardScreen());
       default:
         return MaterialPageRoute(
           builder: (_) => const Scaffold(

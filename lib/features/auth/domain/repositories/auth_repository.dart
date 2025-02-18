@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager_app/api/api_provider.dart';
 import 'package:task_manager_app/features/auth/domain/models/login_response_model.dart';
 import 'package:task_manager_app/util/app_constants.dart';
+import 'package:task_manager_app/util/app_texts.dart';
 
 class AuthRepository {
   final ApiClient apiClient;
@@ -59,22 +60,22 @@ class AuthRepository {
     }
   }
 
-  Future<void> logout() async {
+  Future<bool> logout() async {
     try {
       await sharedPreferences.remove(AppConstants.token);
+      await sharedPreferences.remove(AppTexts.userData);
+      return true;
     } catch (e) {
       throw Exception("Error during logout: $e");
     }
   }
 
   Future<void> saveUser(Map<String, dynamic> userData) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString("user_data", jsonEncode(userData));
+    await sharedPreferences.setString(AppTexts.userData, jsonEncode(userData));
   }
 
   Future<LoginResponseModel?> getUser() async {
-    final prefs = await SharedPreferences.getInstance();
-    String? userData = prefs.getString("user_data");
+    String? userData = sharedPreferences.getString(AppTexts.userData);
     if (userData != null) {
       return LoginResponseModel.fromJson(jsonDecode(userData));
     }

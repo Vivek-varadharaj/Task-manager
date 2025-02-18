@@ -48,6 +48,7 @@ class AuthController extends ChangeNotifier {
       if (response.statusCode == 200) {
         _loginResponseModel = LoginResponseModel.fromJson(response.body);
         authRepository.saveUserToken(_loginResponseModel?.accessToken ?? "");
+        authRepository.saveUser(response.body);
       }
 
       return ResponseModel(
@@ -68,10 +69,12 @@ class AuthController extends ChangeNotifier {
     }
   }
 
-  Future<void> logout() async {
+  Future<bool> logout() async {
     try {
-      await authRepository.logout();
-    } catch (e) {}
+      return await authRepository.logout();
+    } catch (e) {
+      return false;
+    }
   }
 
   Future<void> saveUserToken(String token) async {

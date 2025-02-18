@@ -1,9 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager_app/api/api_provider.dart';
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
 import 'package:task_manager_app/helper/database_helper.dart';
 import 'package:task_manager_app/util/app_constants.dart';
+import 'package:task_manager_app/util/app_texts.dart';
 
 class HomeRepository {
   final ApiClient apiClient;
@@ -26,29 +29,61 @@ class HomeRepository {
     }
   }
 
+  Future<List<Todo>> fetchTodosFromLocalDatabase() async {
+    try {
+      final response = await helper.getTasks();
+      log(response.toString());
 
-  Future<void> addTodo(String todoText, int userId) async {
-  try {
-    final response = await apiClient.postData(
-      AppConstants.addTodoApi,
-      {
-        "todo": todoText,
-        "completed": false,
-        "userId": userId,
-      },
-    );
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      final newTodo = Todo.fromJson(response.body);
-      helper.insertTasks(newTodo);
-   
-    } else {
-      throw Exception(response.body['message'] ?? "Failed to add todo");
+      return response;
+    } catch (e) {
+      rethrow;
     }
-  } catch (e) {
-    print("Error adding todo: $e");
-    rethrow;
   }
-}
 
+  Future<Todo?> addTodo(String todoText, int userId) async {
+    Todo? todo;
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      int? id = prefs.getInt(AppTexts.todoId);
+      final response = await apiClient.postData(
+        AppConstants.addTodoApi,
+        {
+          "todo": todoText,
+          "completed": 0,
+          "userId": userId,
+          "id": (id ?? 0) + 1
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        todo = Todo.fromJson(response.body);
+
+        await helper.insertTasks(Todo.fromJson({
+          "todo": todoText,
+          "completed": 0,
+          "userId": userId,
+          "id": (id ?? 0) + 1
+        }));
+        await saveId((id ?? 0) + 1);
+      } else {
+        throw Exception(response.body['message'] ?? "Failed to add todo");
+      }
+      return todo;
+    } catch (e) {
+      print("Error adding todo: $e");
+      rethrow;
+    }
+  }
+
+  Future<void> saveId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(AppTexts.todoId, id);
+  }
+
+  Future<int?> getId(int id) async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(
+      AppTexts.todoId,
+    );
+  }
 }

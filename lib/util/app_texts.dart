@@ -3,6 +3,10 @@ class AppTexts {
   static const String letsConenct = "Let’s Connect with Lorem Ipsum..!";
   static const String enterUsername = "Enter Username";
   static const String enterPassword = "Enter Password";
+  static const String addTodo = "Add Todo";
+  static const String add = "Add";
+  static const String todoId = "todo_id";
+  static const String userData = "user_data";
 
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";

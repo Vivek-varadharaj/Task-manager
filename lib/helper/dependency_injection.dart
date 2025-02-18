@@ -4,8 +4,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager_app/api/api_provider.dart';
 import 'package:task_manager_app/features/auth/controllers/auth_controller.dart';
 import 'package:task_manager_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:task_manager_app/features/dashboard/controllers/dash_board_controller.dart';
 import 'package:task_manager_app/features/home/controllers/home_controller.dart';
 import 'package:task_manager_app/features/home/domain/repositories/home_repository.dart';
+import 'package:task_manager_app/features/profile/controllers/profile_controller.dart';
+import 'package:task_manager_app/features/profile/domain/repository/profile_repository.dart';
 import 'package:task_manager_app/helper/database_helper.dart';
 
 import 'package:task_manager_app/util/app_constants.dart';
@@ -24,8 +27,14 @@ Future<List<ChangeNotifierProvider>> initProviders() async {
     sharedPreferences: sharedPreferences,
     apiClient: apiClient,
   );
-  final homeRepository =
-      HomeRepository(apiClient: apiClient, helper: dataBaseHelper);
+  final homeRepository = HomeRepository(
+    apiClient: apiClient,
+    helper: dataBaseHelper,
+  );
+
+  final profileRepository = ProfileRepository(
+    apiClient: apiClient,
+  );
 
   return [
     ChangeNotifierProvider<AuthController>(
@@ -33,6 +42,13 @@ Future<List<ChangeNotifierProvider>> initProviders() async {
     ),
     ChangeNotifierProvider<HomeController>(
       create: (context) => HomeController(homeRepository: homeRepository),
+    ),
+    ChangeNotifierProvider<DashboardController>(
+      create: (context) => DashboardController(),
+    ),
+    ChangeNotifierProvider<ProfileController>(
+      create: (context) =>
+          ProfileController(profileRepository: profileRepository),
     ),
   ];
 }

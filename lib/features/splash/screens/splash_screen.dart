@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          Routes.home,
+          Routes.dashboard,
           (route) => false,
         );
       }

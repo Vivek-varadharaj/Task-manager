@@ -1,7 +1,7 @@
 class Todo {
   final int id;
   final String todo;
-  final bool completed;
+  final int completed;
   final int userId;
 
   Todo({
@@ -15,7 +15,7 @@ class Todo {
     return Todo(
       id: json['id'],
       todo: json['todo'],
-      completed: json['completed'],
+      completed: json['completed'] == true ? 1 : 0,
       userId: json['userId'],
     );
   }

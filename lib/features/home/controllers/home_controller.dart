@@ -4,6 +4,7 @@ import 'package:task_manager_app/features/home/domain/repositories/home_reposito
 
 class HomeController extends ChangeNotifier {
   final HomeRepository homeRepository;
+
   List<Todo> todos = [];
   int total = 0;
   int skip = 0;
@@ -14,6 +15,48 @@ class HomeController extends ChangeNotifier {
   HomeController({required this.homeRepository});
 
   Future<void> loadTodos() async {
+    if (isLoading || !hasMore) return;
+
+    isLoading = true;
+    notifyListeners();
+
+    try {
+      List<Todo> localTodo = await homeRepository.fetchTodosFromLocalDatabase();
+      TodoResponse response = await homeRepository
+          .fetchTodos({"skip": skip.toString(), "limit": limit.toString()});
+
+      if (skip == 0) {
+        todos.addAll(localTodo);
+      }
+
+      if (response.todos.isNotEmpty) {
+        todos.addAll(response.todos);
+        skip = skip + 1;
+        total = response.total;
+      } else {
+        hasMore = false;
+      }
+    } catch (e) {
+      print('Error loading todos: $e');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> addTodo(String todoText, int userId) async {
+    try {
+      final newTodo = await homeRepository.addTodo(todoText, userId);
+      if (newTodo != null) {
+        todos.insert(0, newTodo);
+        notifyListeners();
+      }
+    } catch (e) {
+      print("Error adding todo: $e");
+    }
+  }
+
+  Future<void> loadTodosFromLocalDatabase() async {
     if (isLoading || !hasMore) return;
 
     isLoading = true;
