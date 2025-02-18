@@ -1,14 +1,26 @@
+enum TodoPriority { low, medium, high }
+
 class Todo {
   final int id;
   final String todo;
   final int completed;
   final int userId;
+  final int dateAdded;
+  final String? description;
+  final int? dueDate;
+  final bool? remindMe;
+  final TodoPriority? priority;
 
   Todo({
     required this.id,
     required this.todo,
     required this.completed,
     required this.userId,
+    required this.dateAdded,
+    this.description,
+    this.dueDate,
+    this.remindMe,
+    this.priority,
   });
 
   factory Todo.fromJson(Map<String, dynamic> json) {
@@ -17,6 +29,13 @@ class Todo {
       todo: json['todo'],
       completed: json['completed'] == true ? 1 : 0,
       userId: json['userId'],
+      dateAdded: json['dateAdded'] ?? DateTime.now().millisecondsSinceEpoch,
+      description: json['description'],
+      dueDate: json['dueDate'],
+      remindMe: json['remindMe'],
+      priority: json['priority'] != null
+          ? TodoPriority.values[json['priority']]
+          : null,
     );
   }
 
@@ -26,6 +45,11 @@ class Todo {
       'todo': todo,
       'completed': completed,
       'userId': userId,
+      'dateAdded': dateAdded,
+      if (description != null) 'description': description,
+      if (dueDate != null) 'dueDate': dueDate,
+      if (remindMe != null) 'remindMe': remindMe! ? 1 : 0,
+      if (priority != null) 'priority': priority!.index,
     };
   }
 }

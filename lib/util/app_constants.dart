@@ -8,6 +8,7 @@ class AppConstants {
 
   static const String loginUsingPasswordApi = '/auth/login';
   static const String getTodosApi = '/todos';
+  static const String editTodoApi = '/todos/';
   static const String addTodoApi = '/todos/add';
   static const String homeBannerListApi = '/api/banners';
   static const String productListApi = "/api/products";

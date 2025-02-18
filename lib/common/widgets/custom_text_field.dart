@@ -8,6 +8,7 @@ class CustomTextField extends StatefulWidget {
       {super.key,
       this.controller,
       this.obscureText = false,
+      this.textColor = AppColors.neutral100,
       this.hintText,
       this.onChanged,
       this.textInputType,
@@ -19,6 +20,7 @@ class CustomTextField extends StatefulWidget {
   final TextInputType? textInputType;
   final Widget? suffixIcon;
   final bool obscureText;
+  final Color textColor;
 
   @override
   State<CustomTextField> createState() => _CustomTextFieldState();
@@ -32,20 +34,21 @@ class _CustomTextFieldState extends State<CustomTextField> {
           border: Border(bottom: BorderSide(color: AppColors.neutral10))),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
       child: TextField(
+          style: AppTextStyles.heading7
+              .copyWith(fontSize: Dimensions.fontSizeDefault),
           obscureText: widget.obscureText,
           keyboardType: widget.textInputType,
           onChanged: widget.onChanged,
           controller: widget.controller,
           scrollPadding: EdgeInsets.zero,
           decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(bottom: -10.0),
-            suffixIconConstraints: BoxConstraints(maxHeight: 14),
+            contentPadding: const EdgeInsets.only(bottom: -10.0),
+            suffixIconConstraints: const BoxConstraints(maxHeight: 14),
             suffixIcon: widget.suffixIcon,
             isCollapsed: true,
             hintText: widget.hintText,
             hintStyle: AppTextStyles.heading7.copyWith(
-                color: AppColors.neutral80,
-                fontSize: Dimensions.fontSizeDefault),
+                color: widget.textColor, fontSize: Dimensions.fontSizeDefault),
             border: InputBorder.none,
           )),
     );

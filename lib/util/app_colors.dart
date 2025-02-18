@@ -13,9 +13,11 @@ class AppColors {
 
   // Primary colors
   static const Color primary400 = Color(0xff5E5BE2);
-  static const Color primary100 = Color(0xff1D2348);
+    static const Color primary300 = Color.fromARGB(255, 57, 56, 113);
+  static const Color primary100 = Color.fromARGB(255, 144, 149, 183);
 
   // Alert colors
   static const Color alertGreen = Color(0xff00E5A4);
   static const Color alertGold = Color(0xffFA964C);
+  static const Color alertRed = Colors.red;
 }

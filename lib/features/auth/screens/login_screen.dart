@@ -157,7 +157,7 @@ class LoginScreen extends StatelessWidget {
       } else {
         Navigator.pushNamedAndRemoveUntil(
           context,
-          Routes.dashboard,
+          Routes.home,
           (route) => false,
         );
       }

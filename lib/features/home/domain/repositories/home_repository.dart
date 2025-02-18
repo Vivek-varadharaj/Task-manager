@@ -75,6 +75,53 @@ class HomeRepository {
     }
   }
 
+  Future<Todo?> editTodo(int todoId, String updatedText, int completed) async {
+    Todo? updatedTodo;
+    try {
+      final response = await apiClient.putData(
+        "${AppConstants.editTodoApi}$todoId",
+        {
+          "todo": updatedText,
+          "completed": completed,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        updatedTodo = Todo.fromJson(response.body);
+
+        await helper.updateTask(Todo.fromJson({
+          "id": todoId,
+          "todo": updatedText,
+          "completed": completed,
+          'userId': updatedTodo.userId
+        }));
+      } else {
+        throw Exception(response.body['message'] ?? "Failed to update todo");
+      }
+      return updatedTodo;
+    } catch (e) {
+      print("Error updating todo: $e");
+      rethrow;
+    }
+  }
+
+  Future<bool> deleteTodo(int todoId) async {
+    try {
+      final response =
+          await apiClient.deleteData("${AppConstants.editTodoApi}$todoId");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        await helper.deleteTask(todoId);
+        return true;
+      } else {
+        throw Exception(response.body['message'] ?? "Failed to delete todo");
+      }
+    } catch (e) {
+      print("Error deleting todo: $e");
+      rethrow;
+    }
+  }
+
   Future<void> saveId(int id) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(AppTexts.todoId, id);

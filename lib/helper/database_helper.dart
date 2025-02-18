@@ -19,16 +19,17 @@ class DatabaseHelper {
     final path = join(await getDatabasesPath(), 'tasks.db');
     return openDatabase(
       path,
-      version: 1,
+      version: 1, // Incremented version for schema change
       onCreate: (db, version) async {
         await db.execute('''
-          CREATE TABLE tasks (
-            id INTEGER PRIMARY KEY,
-            todo TEXT,
-            completed INTEGER,
-            userId INTEGER
-          )
-        ''');
+        CREATE TABLE tasks (
+          id INTEGER PRIMARY KEY,
+          todo TEXT,
+          completed INTEGER,
+          userId INTEGER,
+          dateAdded INTEGER DEFAULT (strftime('%s', 'now')) -- Timestamp for sorting
+        )
+      ''');
       },
     );
   }
@@ -43,9 +44,25 @@ class DatabaseHelper {
     );
   }
 
+  Future<void> updateTask(Todo task) async {
+    final db = await database;
+
+    await db.update(
+      'tasks',
+      task.toJson(),
+      where: 'id = ?',
+      whereArgs: [task.id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
   Future<List<Todo>> getTasks() async {
     final db = await database;
-    final List<Map<String, dynamic>> maps = await db.query('tasks');
+    final List<Map<String, dynamic>> maps = await db.query(
+      'tasks',
+      orderBy: 'dateAdded DESC',
+    );
+
     return List.generate(maps.length, (i) => Todo.fromJson(maps[i]));
   }
 

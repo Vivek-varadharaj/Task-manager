@@ -3,8 +3,6 @@ import 'package:task_manager_app/util/app_colors.dart';
 import 'package:task_manager_app/util/app_text_styles.dart';
 import 'package:task_manager_app/util/dimensions.dart';
 
-
-
 class CustomButton extends StatelessWidget {
   const CustomButton(
       {super.key,
@@ -31,7 +29,7 @@ class CustomButton extends StatelessWidget {
             elevation: 0,
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
-            backgroundColor: backgroundColor ?? AppColors.primary400,
+            backgroundColor: backgroundColor ?? AppColors.primary300,
             textStyle: AppTextStyles.button,
           ),
           onPressed: onTap ?? () {},

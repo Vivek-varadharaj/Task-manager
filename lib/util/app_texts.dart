@@ -7,6 +7,7 @@ class AppTexts {
   static const String add = "Add";
   static const String todoId = "todo_id";
   static const String userData = "user_data";
+  static const String tasks = "Tasks";
 
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";
