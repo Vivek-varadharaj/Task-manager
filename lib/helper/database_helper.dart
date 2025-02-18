@@ -19,15 +19,19 @@ class DatabaseHelper {
     final path = join(await getDatabasesPath(), 'tasks.db');
     return openDatabase(
       path,
-      version: 1, // Incremented version for schema change
+      version: 1,
       onCreate: (db, version) async {
         await db.execute('''
         CREATE TABLE tasks (
           id INTEGER PRIMARY KEY,
-          todo TEXT,
-          completed INTEGER,
-          userId INTEGER,
-          dateAdded INTEGER DEFAULT (strftime('%s', 'now')) -- Timestamp for sorting
+          todo TEXT NOT NULL,
+          completed INTEGER NOT NULL,
+          userId INTEGER NOT NULL,
+          dateAdded INTEGER DEFAULT (strftime('%s', 'now')),
+          description TEXT,
+          dueDate TEXT,
+          remindMe INTEGER, -- 0 for false, 1 for true
+          priority INTEGER -- Store enum as integer
         )
       ''');
       },

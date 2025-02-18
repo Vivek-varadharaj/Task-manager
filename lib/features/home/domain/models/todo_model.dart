@@ -1,4 +1,11 @@
-enum TodoPriority { low, medium, high }
+enum TodoPriority {
+  low,
+  medium,
+  high;
+
+  int toInt() => index;
+  static TodoPriority fromInt(int index) => TodoPriority.values[index];
+}
 
 class Todo {
   final int id;
@@ -7,7 +14,7 @@ class Todo {
   final int userId;
   final int dateAdded;
   final String? description;
-  final int? dueDate;
+  final String? dueDate;
   final bool? remindMe;
   final TodoPriority? priority;
 
@@ -39,9 +46,9 @@ class Todo {
     );
   }
 
-  Map<String, dynamic> toJson() {
+  Map<String, dynamic> toJson({bool sendId = true}) {
     return {
-      'id': id,
+      if (sendId) 'id': id,
       'todo': todo,
       'completed': completed,
       'userId': userId,
@@ -49,8 +56,32 @@ class Todo {
       if (description != null) 'description': description,
       if (dueDate != null) 'dueDate': dueDate,
       if (remindMe != null) 'remindMe': remindMe! ? 1 : 0,
-      if (priority != null) 'priority': priority!.index,
+      if (priority != null) 'priority': priority!.toInt(),
     };
+  }
+
+  Todo copyWith({
+    int? id,
+    String? todo,
+    int? completed,
+    int? userId,
+    int? dateAdded,
+    String? description,
+    String? dueDate,
+    bool? remindMe,
+    TodoPriority? priority,
+  }) {
+    return Todo(
+      id: id ?? this.id,
+      todo: todo ?? this.todo,
+      completed: completed ?? this.completed,
+      userId: userId ?? this.userId,
+      dateAdded: dateAdded ?? this.dateAdded,
+      description: description ?? this.description,
+      dueDate: dueDate ?? this.dueDate,
+      remindMe: remindMe ?? this.remindMe,
+      priority: priority ?? this.priority,
+    );
   }
 }
 

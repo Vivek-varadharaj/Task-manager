@@ -28,6 +28,7 @@ class CustomButton extends StatelessWidget {
           style: ElevatedButton.styleFrom(
             elevation: 0,
             shape: RoundedRectangleBorder(
+                side: BorderSide(color: textColor ?? Colors.transparent),
                 borderRadius: BorderRadius.circular(Dimensions.radiusDefault)),
             backgroundColor: backgroundColor ?? AppColors.primary300,
             textStyle: AppTextStyles.button,
@@ -43,7 +44,7 @@ class CustomButton extends StatelessWidget {
                       )))
               : Text(
                   title ?? "",
-                  style: AppTextStyles.button,
+                  style: AppTextStyles.button.copyWith(color: textColor),
                 )),
     );
   }

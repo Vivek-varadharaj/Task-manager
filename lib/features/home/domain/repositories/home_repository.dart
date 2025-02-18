@@ -40,7 +40,8 @@ class HomeRepository {
     }
   }
 
-  Future<Todo?> addTodo(String todoText, int userId) async {
+  Future<Todo?> addTodo(String todoText, int userId, String description,
+      TodoPriority priority, DateTime dueDate) async {
     Todo? todo;
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -56,14 +57,16 @@ class HomeRepository {
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        todo = Todo.fromJson(response.body);
-
-        await helper.insertTasks(Todo.fromJson({
+        todo = Todo.fromJson({
           "todo": todoText,
           "completed": 0,
           "userId": userId,
-          "id": (id ?? 0) + 1
-        }));
+          "id": (id ?? 0) + 1,
+          "description": description,
+          "dueDate": dueDate.toString(),
+          "priority": priority.toInt()
+        });
+        await helper.insertTasks(todo);
         await saveId((id ?? 0) + 1);
       } else {
         throw Exception(response.body['message'] ?? "Failed to add todo");
@@ -75,26 +78,18 @@ class HomeRepository {
     }
   }
 
-  Future<Todo?> editTodo(int todoId, String updatedText, int completed) async {
+  Future<Todo?> editTodo(Todo todo) async {
     Todo? updatedTodo;
     try {
       final response = await apiClient.putData(
-        "${AppConstants.editTodoApi}$todoId",
-        {
-          "todo": updatedText,
-          "completed": completed,
-        },
+        "${AppConstants.editTodoApi}${todo.id}",
+        todo.toJson(sendId: false),
       );
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 200) {
         updatedTodo = Todo.fromJson(response.body);
 
-        await helper.updateTask(Todo.fromJson({
-          "id": todoId,
-          "todo": updatedText,
-          "completed": completed,
-          'userId': updatedTodo.userId
-        }));
+        await helper.updateTask(todo);
       } else {
         throw Exception(response.body['message'] ?? "Failed to update todo");
       }

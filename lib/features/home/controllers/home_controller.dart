@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
+
 import 'package:task_manager_app/common/models/response_model.dart';
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
 import 'package:task_manager_app/features/home/domain/repositories/home_repository.dart';
@@ -16,6 +16,8 @@ class HomeController extends ChangeNotifier {
   bool isOfflineLoading = false;
   bool isButtonLoading = false;
   bool hasMore = true;
+  TodoPriority priority = TodoPriority.high;
+  DateTime dueDate = DateTime.now();
 
   HomeController({required this.homeRepository});
 
@@ -57,39 +59,46 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  Future<void> addTodo(String todoText, int userId) async {
+  Future<ResponseModel> addTodo(
+      String todoText, int userId, String description) async {
     isButtonLoading = true;
     notifyListeners();
     try {
-      final newTodo = await homeRepository.addTodo(todoText, userId);
+      final newTodo = await homeRepository.addTodo(
+          todoText, userId, description, priority, dueDate);
       if (newTodo != null) {
         localTodo.insert(0, newTodo);
         notifyListeners();
+        return ResponseModel(true, "Todo added successfully");
       }
+      return ResponseModel(false, "failed");
     } catch (e) {
-      print("Error adding todo: $e");
+      return ResponseModel(false, e.toString());
     } finally {
       isButtonLoading = false;
       notifyListeners();
     }
   }
 
-  Future<void> editTodo(String todoText, int completed, int todoId) async {
+  Future<ResponseModel> editTodo(Todo todo) async {
+    isButtonLoading = true;
+    notifyListeners();
     try {
-      final newTodo = await homeRepository.editTodo(
-        todoId,
-        todoText,
-        completed,
-      );
+      final newTodo = await homeRepository.editTodo(todo);
       if (newTodo != null) {
         localTodo.removeWhere(
-          (element) => element.id == todoId,
+          (element) => element.id == todo.id,
         );
-        localTodo.insert(0, newTodo);
+        localTodo.insert(0, todo);
         notifyListeners();
+        return ResponseModel(true, "Todo edit successfully");
       }
+      return ResponseModel(false, "Todo edit failed");
     } catch (e) {
-      print("Error editing todo: $e");
+      return ResponseModel(true, e.toString());
+    } finally {
+      isButtonLoading = false;
+      notifyListeners();
     }
   }
 
@@ -104,12 +113,22 @@ class HomeController extends ChangeNotifier {
           (element) => element.id == todoId,
         );
       }
-
       notifyListeners();
+
       return ResponseModel(deleted, "");
     } catch (e) {
       print("Error deleting todo: $e");
       return ResponseModel(false, e.toString());
     }
+  }
+
+  togglePriority(TodoPriority priority) {
+    this.priority = priority;
+    notifyListeners();
+  }
+
+  toggleDueDate(DateTime dueDate) {
+    this.dueDate = dueDate;
+    notifyListeners();
   }
 }
