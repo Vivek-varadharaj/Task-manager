@@ -23,13 +23,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.primary300,
+      color: AppColors.neutral0,
       child: AppBar(
         bottom: bottom,
         automaticallyImplyLeading: false,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        shadowColor: AppColors.primary400,
+        shadowColor: AppColors.neutral0,
         leadingWidth: 56,
         leading: showPrefix
             ? InkWell(
@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         title: Text(
           heading,
           style: AppTextStyles.heading3
-              .copyWith(color: AppColors.neutral0, fontSize: 24),
+              .copyWith(color: AppColors.primary300, fontSize: 24),
         ),
         centerTitle: false,
         actions: suffixIcons, // Takes unlimited widgets as actions

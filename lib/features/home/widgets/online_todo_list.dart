@@ -5,6 +5,7 @@ import 'package:task_manager_app/features/home/controllers/home_controller.dart'
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
 import 'package:task_manager_app/features/home/widgets/modal_sheet_for_edit.dart';
 import 'package:task_manager_app/util/app_colors.dart';
+import 'package:task_manager_app/util/app_text_styles.dart';
 import 'package:task_manager_app/util/dimensions.dart';
 
 class OnlineTodosList extends StatelessWidget {
@@ -53,39 +54,50 @@ class OnlineTodosList extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            endActionPane: ActionPane(
-                              motion: const ScrollMotion(),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    addOrEditToDo(
-                                      todo: homeController.todos[index],
-                                      tabController: tabController,
-                                      context: context,
-                                    );
-                                  },
-                                  backgroundColor: AppColors.alertGreen,
-                                  foregroundColor: AppColors.neutral0,
-                                  icon: Icons.edit,
-                                  label: 'Edit',
-                                ),
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    homeController.assignValues(
-                                        homeController.todos[index]);
-                                    homeController.editTodo(
-                                      homeController.todos[index]
-                                          .copyWith(completed: 1),
-                                    );
-                                  },
-                                  backgroundColor: AppColors.alertGold,
-                                  foregroundColor: AppColors.neutral0,
-                                  icon: Icons.done,
-                                  label: 'Complete',
-                                ),
-                              ],
-                            ),
+                            endActionPane: (homeController
+                                        .todos[index].completed ==
+                                    0)
+                                ? ActionPane(
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (context) {
+                                          addOrEditToDo(
+                                            todo: homeController.todos[index],
+                                            tabController: tabController,
+                                            context: context,
+                                          );
+                                        },
+                                        backgroundColor: AppColors.alertGreen,
+                                        foregroundColor: AppColors.neutral0,
+                                        icon: Icons.edit,
+                                        label: 'Edit',
+                                      ),
+                                      SlidableAction(
+                                        onPressed: (context) {
+                                          homeController.assignValues(
+                                              homeController.todos[index]);
+                                          homeController.editTodo(
+                                            homeController.todos[index]
+                                                .copyWith(completed: 1),
+                                          );
+                                        },
+                                        backgroundColor: AppColors.alertGold,
+                                        foregroundColor: AppColors.neutral0,
+                                        icon: Icons.done,
+                                        label: 'Complete',
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             child: ListTile(
+                              trailing:
+                                  homeController.todos[index].completed == 1
+                                      ? const Icon(
+                                          Icons.done,
+                                          color: AppColors.neutral0,
+                                        )
+                                      : const SizedBox(),
                               onTap: () {
                                 addOrEditToDo(
                                     context: context,
@@ -97,8 +109,17 @@ class OnlineTodosList extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(
                                     Dimensions.radiusDefault),
                               ),
-                              tileColor: AppColors.neutral0.withOpacity(0.65),
-                              title: Text(homeController.todos[index].todo),
+                              tileColor:
+                                  homeController.todos[index].completed == 1
+                                      ? AppColors.alertGreen.withOpacity(0.65)
+                                      : AppColors.primary100.withOpacity(0.65),
+                              title: Text(homeController.todos[index].todo,
+                                  style: AppTextStyles.para2.copyWith(
+                                      color: (homeController
+                                                  .todos[index].completed ==
+                                              0)
+                                          ? AppColors.neutral100
+                                          : AppColors.neutral0)),
                             ),
                           );
                         },

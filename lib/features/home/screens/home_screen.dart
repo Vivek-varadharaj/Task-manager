@@ -89,11 +89,11 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           showPrefix: false,
           bottom: TabBar(
             dividerHeight: 0,
-            indicatorColor: AppColors.neutral0,
+            indicatorColor: AppColors.primary300,
             indicatorSize: TabBarIndicatorSize.tab,
             unselectedLabelColor: AppColors.primary100,
             labelStyle:
-                AppTextStyles.button.copyWith(color: AppColors.neutral0),
+                AppTextStyles.button.copyWith(color: AppColors.primary300),
             controller: _tabController,
             tabs: const [
               Tab(

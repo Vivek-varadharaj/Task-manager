@@ -11,6 +11,7 @@ class AppTexts {
   static const String email = "Email";
   static const String gender = "Gender";
   static const String save = "Save";
+  static const String dueOn = "Due on ";
 
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";
