@@ -8,6 +8,9 @@ class AppTexts {
   static const String todoId = "todo_id";
   static const String userData = "user_data";
   static const String tasks = "Tasks";
+  static const String email = "Email";
+  static const String gender = "Gender";
+  static const String save = "Save";
 
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";

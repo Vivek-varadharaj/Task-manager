@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
@@ -51,13 +53,14 @@ class DatabaseHelper {
   Future<void> updateTask(Todo task) async {
     final db = await database;
 
-    await db.update(
+    int value = await db.update(
       'tasks',
       task.toJson(),
       where: 'id = ?',
       whereArgs: [task.id],
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+    log(value.toString());
   }
 
   Future<List<Todo>> getTasks() async {

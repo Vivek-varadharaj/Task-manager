@@ -34,6 +34,7 @@ Future<List<ChangeNotifierProvider>> initProviders() async {
 
   final profileRepository = ProfileRepository(
     apiClient: apiClient,
+    sharedPreferences:sharedPreferences
   );
 
   return [

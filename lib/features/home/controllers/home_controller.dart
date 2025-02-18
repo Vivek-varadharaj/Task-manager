@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 import 'package:task_manager_app/common/models/response_model.dart';
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
 import 'package:task_manager_app/features/home/domain/repositories/home_repository.dart';
+import 'package:task_manager_app/features/home/widgets/modal_sheet_for_edit.dart';
 
 class HomeController extends ChangeNotifier {
   final HomeRepository homeRepository;
@@ -19,7 +22,17 @@ class HomeController extends ChangeNotifier {
   TodoPriority priority = TodoPriority.high;
   DateTime dueDate = DateTime.now();
 
-  HomeController({required this.homeRepository});
+  late ScrollController scrollController;
+  late ScrollController offlineScrollController;
+  late TextEditingController todoController;
+  late TextEditingController descriptionController;
+
+  HomeController({required this.homeRepository}) {
+    scrollController = ScrollController();
+    offlineScrollController = ScrollController();
+    todoController = TextEditingController();
+    descriptionController = TextEditingController();
+  }
 
   Future<void> loadTodos() async {
     if (isLoading || !hasMore) return;
@@ -59,13 +72,12 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  Future<ResponseModel> addTodo(
-      String todoText, int userId, String description) async {
+  Future<ResponseModel> addTodo() async {
     isButtonLoading = true;
     notifyListeners();
     try {
-      final newTodo = await homeRepository.addTodo(
-          todoText, userId, description, priority, dueDate);
+      final newTodo = await homeRepository.addTodo(todoController.text.trim(),
+          1, descriptionController.text.trim(), priority, dueDate);
       if (newTodo != null) {
         localTodo.insert(0, newTodo);
         notifyListeners();
@@ -80,16 +92,32 @@ class HomeController extends ChangeNotifier {
     }
   }
 
-  Future<ResponseModel> editTodo(Todo todo) async {
+  Future<ResponseModel> editTodo(Todo todo, {bool isLocal = true}) async {
     isButtonLoading = true;
     notifyListeners();
     try {
-      final newTodo = await homeRepository.editTodo(todo);
+      final newTodo = await homeRepository.editTodo(todo!.copyWith(
+          completed: todo.completed,
+          description: descriptionController.text.trim(),
+          priority: priority,
+          dueDate: dueDate.toString(),
+          todo: todoController.text.trim()));
       if (newTodo != null) {
-        localTodo.removeWhere(
-          (element) => element.id == todo.id,
-        );
-        localTodo.insert(0, todo);
+        if (isLocal) {
+          log("if worked");
+          localTodo.removeWhere(
+            (element) => element.id == todo.id,
+          );
+
+          localTodo.insert(0, newTodo);
+        } else {
+          log("Else worked");
+          todos.removeWhere(
+            (element) => element.id == todo.id,
+          );
+          todos.insert(0, newTodo);
+        }
+
         notifyListeners();
         return ResponseModel(true, "Todo edit successfully");
       }
@@ -130,5 +158,32 @@ class HomeController extends ChangeNotifier {
   toggleDueDate(DateTime dueDate) {
     this.dueDate = dueDate;
     notifyListeners();
+  }
+
+  void clearEditFields() {
+    priority = TodoPriority.high;
+    dueDate = DateTime.now();
+    todoController.clear();
+    descriptionController.clear();
+  }
+
+  void assignValues(Todo todo) {
+    priority = todo.priority ?? TodoPriority.high;
+    dueDate = DateTime.parse(todo.dueDate ?? DateTime.now().toString());
+    todoController.text = todo.todo;
+    descriptionController.text = todo.description ?? "";
+    notifyListeners();
+  }
+
+ 
+
+  @override
+  void dispose() {
+    scrollController.dispose();
+    offlineScrollController.dispose();
+    todoController.dispose();
+    descriptionController.dispose();
+
+    super.dispose();
   }
 }

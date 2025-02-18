@@ -9,10 +9,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool showPrefix;
   final void Function()? onTap;
   final PreferredSizeWidget? bottom;
+  final double height;
 
   const CustomAppBar(
       {super.key,
       required this.heading,
+      this.height = 100,
       this.bottom,
       this.suffixIcons,
       this.onTap,
@@ -36,15 +38,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                       Navigator.of(context).pop();
                     },
                 child: Container(
-                  margin: const EdgeInsets.only(left: 16),
-                  height: 56,
-                  width: 56,
+                  margin: const EdgeInsets.only(left: 16, right: 8),
+                  height: 40,
+                  width: 40,
                   decoration: const BoxDecoration(
                       shape: BoxShape.circle, color: AppColors.neutral0),
                   child: const Icon(
                     Icons.keyboard_arrow_left,
                     color: AppColors.primary400,
-                    size: 36,
+                    size: 28,
                   ),
                 ),
               )
@@ -62,5 +64,5 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(100);
+  Size get preferredSize => Size.fromHeight(height);
 }

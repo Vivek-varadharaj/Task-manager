@@ -79,7 +79,6 @@ class HomeRepository {
   }
 
   Future<Todo?> editTodo(Todo todo) async {
-    Todo? updatedTodo;
     try {
       final response = await apiClient.putData(
         "${AppConstants.editTodoApi}${todo.id}",
@@ -87,13 +86,11 @@ class HomeRepository {
       );
 
       if (response.statusCode == 200 || response.statusCode == 200) {
-        updatedTodo = Todo.fromJson(response.body);
-
         await helper.updateTask(todo);
       } else {
         throw Exception(response.body['message'] ?? "Failed to update todo");
       }
-      return updatedTodo;
+      return todo;
     } catch (e) {
       print("Error updating todo: $e");
       rethrow;

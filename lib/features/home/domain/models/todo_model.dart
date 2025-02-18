@@ -34,7 +34,11 @@ class Todo {
     return Todo(
       id: json['id'],
       todo: json['todo'],
-      completed: json['completed'] == true ? 1 : 0,
+      completed: json['completed'].runtimeType == bool
+          ? json['completed'] == true
+              ? 1
+              : 0
+          : json['completed'],
       userId: json['userId'],
       dateAdded: json['dateAdded'] ?? DateTime.now().millisecondsSinceEpoch,
       description: json['description'],

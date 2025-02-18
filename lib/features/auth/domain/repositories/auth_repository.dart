@@ -74,11 +74,5 @@ class AuthRepository {
     await sharedPreferences.setString(AppTexts.userData, jsonEncode(userData));
   }
 
-  Future<LoginResponseModel?> getUser() async {
-    String? userData = sharedPreferences.getString(AppTexts.userData);
-    if (userData != null) {
-      return LoginResponseModel.fromJson(jsonDecode(userData));
-    }
-    return null;
-  }
+ 
 }

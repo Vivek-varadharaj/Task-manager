@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_manager_app/common/widgets/custom_appbar.dart';
 import 'package:task_manager_app/features/auth/controllers/auth_controller.dart';
 import 'package:task_manager_app/features/profile/controllers/profile_controller.dart';
 import 'package:task_manager_app/features/profile/widgets/profile_tile.dart';
@@ -15,60 +16,67 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
-          child: Consumer<ProfileController>(
-              builder: (context, profileController, child) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: Dimensions.paddingSizeDefault,
-                ),
-                Text(
-                  AppTexts.myProfile,
-                  style: AppTextStyles.heeboHeading.copyWith(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18,
-                      color: AppColors.primary100),
-                ),
-                SizedBox(
-                  height: Dimensions.paddingSizeExtraOverLarge,
-                ),
-                ProfileTile(heading: AppTexts.name, subheading: ""),
-                SizedBox(
-                  height: Dimensions.paddingSizeExtraLarge,
-                ),
-                ProfileTile(heading: AppTexts.phone, subheading: ""),
-                SizedBox(
-                  height: (Dimensions.paddingSizeExtraOverLarge),
-                ),
-                Center(
-                  child: TextButton(
-                      onPressed: () async {
-                        bool loggedOut = await Provider.of<AuthController>(
-                                context,
-                                listen: false)
-                            .logout();
-                        if (loggedOut) {
-                          Navigator.of(context).pushNamedAndRemoveUntil(
-                            Routes.login,
-                            (route) => false,
-                          );
-                        }
-                      },
-                      child: Text(
-                        AppTexts.logout,
-                        style: AppTextStyles.button
-                            .copyWith(color: AppColors.primary400),
-                      )),
-                )
-              ],
-            );
-          }),
-        ),
+      appBar: const CustomAppBar(
+        heading: AppTexts.myProfile,
+        height: 60,
       ),
+      body: Consumer<ProfileController>(
+          builder: (context, profileController, child) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
+            child: Consumer<ProfileController>(
+                builder: (context, profileController, child) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: Dimensions.paddingSizeDefault,
+                  ),
+                  ProfileTile(
+                      heading: AppTexts.name,
+                      subheading: profileController.user?.firstName ?? ""),
+                  SizedBox(
+                    height: Dimensions.paddingSizeExtraLarge,
+                  ),
+                  ProfileTile(
+                      heading: AppTexts.email,
+                      subheading: profileController.user?.email ?? ""),
+                  SizedBox(
+                    height: (Dimensions.paddingSizeExtraLarge),
+                  ),
+                  ProfileTile(
+                      heading: AppTexts.gender,
+                      subheading: profileController.user?.gender ?? ""),
+                  SizedBox(
+                    height: (Dimensions.paddingSizeExtraOverLarge),
+                  ),
+                  Center(
+                    child: TextButton(
+                        onPressed: () async {
+                          bool loggedOut = await Provider.of<AuthController>(
+                                  context,
+                                  listen: false)
+                              .logout();
+                          if (loggedOut) {
+                            Navigator.of(context).pushNamedAndRemoveUntil(
+                              Routes.login,
+                              (route) => false,
+                            );
+                          }
+                        },
+                        child: Text(
+                          AppTexts.logout,
+                          style: AppTextStyles.button
+                              .copyWith(color: AppColors.primary400),
+                        )),
+                  )
+                ],
+              );
+            }),
+          ),
+        );
+      }),
     );
   }
 }

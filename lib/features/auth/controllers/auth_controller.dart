@@ -83,11 +83,6 @@ class AuthController extends ChangeNotifier {
     } catch (e) {}
   }
 
-  Future<void> loadUser() async {
-    _loginResponseModel = await authRepository.getUser();
-    notifyListeners();
-  }
-
   @override
   void dispose() {
     _timer?.cancel();
