@@ -88,10 +88,15 @@ class TodoBottomSheet extends StatelessWidget {
           ),
           SizedBox(height: Dimensions.paddingSizeDefault),
           TextField(
+            style: AppTextStyles.heading7
+                .copyWith(fontSize: Dimensions.fontSizeDefault),
             maxLines: 8,
             minLines: 3,
             controller: homeController.descriptionController,
             decoration: InputDecoration(
+              hintStyle: AppTextStyles.heading7.copyWith(
+                  color: AppColors.neutral10,
+                  fontSize: Dimensions.fontSizeDefault),
               hintText: "Enter your text...",
               focusedBorder: OutlineInputBorder(
                 borderSide:

@@ -36,7 +36,8 @@ class OnlineTodosList extends StatelessWidget {
                           return Slidable(
                             key: ValueKey(homeController.todos[index].id),
                             startActionPane: ActionPane(
-                              motion: const ScrollMotion(),
+                              dragDismissible: false,
+                              motion: const StretchMotion(),
                               dismissible: DismissiblePane(onDismissed: () {
                                 homeController
                                     .deleteTodo(homeController.todos[index].id);
@@ -58,7 +59,8 @@ class OnlineTodosList extends StatelessWidget {
                                         .todos[index].completed ==
                                     0)
                                 ? ActionPane(
-                                    motion: const ScrollMotion(),
+                                    dragDismissible: false,
+                                    motion: const StretchMotion(),
                                     children: [
                                       SlidableAction(
                                         onPressed: (context) {
@@ -68,7 +70,7 @@ class OnlineTodosList extends StatelessWidget {
                                             context: context,
                                           );
                                         },
-                                        backgroundColor: AppColors.alertGreen,
+                                        backgroundColor: AppColors.alertGold,
                                         foregroundColor: AppColors.neutral0,
                                         icon: Icons.edit,
                                         label: 'Edit',
@@ -82,7 +84,7 @@ class OnlineTodosList extends StatelessWidget {
                                                 .copyWith(completed: 1),
                                           );
                                         },
-                                        backgroundColor: AppColors.alertGold,
+                                        backgroundColor: AppColors.alertGreen,
                                         foregroundColor: AppColors.neutral0,
                                         icon: Icons.done,
                                         label: 'Complete',
