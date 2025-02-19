@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager_app/api/api_provider.dart';
-import 'package:task_manager_app/features/auth/domain/models/login_response_model.dart';
+
 import 'package:task_manager_app/util/app_constants.dart';
 import 'package:task_manager_app/util/app_texts.dart';
 
@@ -20,25 +20,12 @@ class AuthRepository {
         if (response.body['token'] != null) {
           await saveUserToken(response.body['token']['access']);
         }
+
         return response;
       }
       throw Exception(response.body['message'] ?? "Registration failed");
     } catch (e) {
       rethrow;
-    }
-  }
-
-  Future<ApiResponse> verifyOtp(Map signUpBody) async {
-    try {
-      ApiResponse response = await apiClient
-          .postData(AppConstants.verifyOtpApi, signUpBody, handleError: false);
-      if (response.statusCode == 200) {
-        if (response.body['token'] != null) {}
-        return response;
-      }
-      throw Exception(response.body['message'] ?? "OTP verification failed");
-    } catch (e) {
-      throw Exception("Error during OTP verification: $e");
     }
   }
 
@@ -73,6 +60,4 @@ class AuthRepository {
   Future<void> saveUser(Map<String, dynamic> userData) async {
     await sharedPreferences.setString(AppTexts.userData, jsonEncode(userData));
   }
-
- 
 }

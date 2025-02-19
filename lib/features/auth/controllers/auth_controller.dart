@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/common/models/response_model.dart';
-import 'package:task_manager_app/features/auth/domain/models/login_request_model.dart';
+
 import 'package:task_manager_app/features/auth/domain/models/login_response_model.dart';
 import 'package:task_manager_app/features/auth/domain/repositories/auth_repository.dart';
 
@@ -18,37 +18,19 @@ class AuthController extends ChangeNotifier {
   bool _obsecureText = true;
   bool get obsecureText => _obsecureText;
 
-  int _secondsRemaining = 60;
-  Timer? _timer;
-  int get secondsRemaining => _secondsRemaining;
-  bool get isResendEnabled => _secondsRemaining == 0;
-
-  void startTimer() {
-    _timer?.cancel();
-    _secondsRemaining = 60;
-    notifyListeners();
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_secondsRemaining > 0) {
-        _secondsRemaining--;
-        notifyListeners();
-      } else {
-        timer.cancel();
-        notifyListeners();
-      }
-    });
-  }
-
   Future<ResponseModel> loginUsingPassword(
-      {required LoginRequestModel loginRequestModel}) async {
+      {required Map<String, dynamic> loginRequestModel}) async {
     try {
       _isLoading = true;
       notifyListeners();
       final response =
-          await authRepository.loginUsingPassword(loginRequestModel.toJson());
+          await authRepository.loginUsingPassword(loginRequestModel);
       if (response.statusCode == 200) {
         _loginResponseModel = LoginResponseModel.fromJson(response.body);
         authRepository.saveUserToken(_loginResponseModel?.accessToken ?? "");
         authRepository.saveUser(response.body);
+
+        return ResponseModel(response.statusCode == 200, "Login successful");
       }
 
       return ResponseModel(
@@ -83,9 +65,10 @@ class AuthController extends ChangeNotifier {
     } catch (e) {}
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    super.dispose();
+  Future<void> toggleObsecureText() async {
+    try {
+      _obsecureText = !_obsecureText;
+      notifyListeners();
+    } catch (e) {}
   }
 }

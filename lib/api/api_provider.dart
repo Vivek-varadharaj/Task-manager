@@ -9,13 +9,13 @@ import 'package:task_manager_app/util/app_constants.dart';
 
 class ApiResponse {
   final dynamic body;
-  final String bodyString;
+  final String? bodyString;
   final int statusCode;
   final String? statusText;
 
   ApiResponse({
     required this.body,
-    required this.bodyString,
+    this.bodyString,
     required this.statusCode,
     this.statusText,
   });

@@ -150,7 +150,7 @@ class LoginScreen extends StatelessWidget {
           const SnackBar(content: Text("Please enter a password")));
     } else {
       ResponseModel responseModel = await authController.loginUsingPassword(
-          loginRequestModel: loginRequestModel);
+          loginRequestModel: loginRequestModel.toJson());
       if (!responseModel.isSuccess) {
         return scaffoldMessengerKey.currentState?.showSnackBar(
             SnackBar(content: Text(responseModel.message ?? "Login failed")));
