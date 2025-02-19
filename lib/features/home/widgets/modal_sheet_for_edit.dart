@@ -101,7 +101,7 @@ class TodoBottomSheet extends StatelessWidget {
             },
             textColor: AppColors.primary300,
             backgroundColor: Colors.transparent,
-            isLoading: homeController.isButtonLoading,
+            isLoading: false,
             title: DateFormat("MMM d, yyyy").format(homeController.dueDate),
           ),
           SizedBox(height: Dimensions.paddingSizeDefault),
@@ -153,7 +153,6 @@ class TodoBottomSheet extends StatelessWidget {
               if (message == null) {
                 ResponseModel responseModel;
                 if (isForEdit) {
-                  log("This is for editing");
                   responseModel =
                       await homeController.editTodo(todo!, isLocal: isLocal);
                 } else {
