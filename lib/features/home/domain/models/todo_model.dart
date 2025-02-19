@@ -12,7 +12,7 @@ class Todo {
   final String todo;
   final int completed;
   final int userId;
-  final int dateAdded;
+  final int? dateAdded;
   final String? description;
   final String? dueDate;
   final bool? remindMe;
@@ -23,7 +23,7 @@ class Todo {
     required this.todo,
     required this.completed,
     required this.userId,
-    required this.dateAdded,
+    this.dateAdded,
     this.description,
     this.dueDate,
     this.remindMe,
@@ -43,7 +43,7 @@ class Todo {
       dateAdded: json['dateAdded'] ?? DateTime.now().millisecondsSinceEpoch,
       description: json['description'],
       dueDate: json['dueDate'],
-      remindMe: json['remindMe'],
+      remindMe: json['remindMe'] == 1 ? true : false,
       priority: json['priority'] != null
           ? TodoPriority.values[json['priority']]
           : null,
