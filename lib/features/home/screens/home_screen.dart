@@ -10,6 +10,7 @@ import 'package:task_manager_app/features/home/widgets/modal_sheet_for_edit.dart
 
 import 'package:task_manager_app/features/home/widgets/offline_todo_list.dart';
 import 'package:task_manager_app/features/home/widgets/online_todo_list.dart';
+import 'package:task_manager_app/features/internet_connectivity/controllers/controller.dart';
 import 'package:task_manager_app/helper/app_routes.dart';
 
 import 'package:task_manager_app/util/app_colors.dart';
@@ -78,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
               },
               child: const Icon(
                 Icons.person,
-                color: AppColors.neutral0,
+                color: AppColors.primary300,
               ),
             ),
             SizedBox(
@@ -113,9 +114,23 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                   child: TabBarView(
                     controller: _tabController,
                     children: [
-                      OnlineTodosList(
-                        tabController: _tabController,
-                      ),
+                      Consumer<ConnectivityController>(
+                          builder: (context, connectivityController, child) {
+                        return connectivityController.isConnected
+                            ? OnlineTodosList(
+                                tabController: _tabController,
+                              )
+                            : Padding(
+                                padding: EdgeInsets.all(
+                                  Dimensions.paddingSizeLarge,
+                                ),
+                                child: Center(
+                                    child: Text(
+                                  "No internet connection",
+                                  style: AppTextStyles.heading3,
+                                )),
+                              );
+                      }),
                       OfflineTodosList(
                         tabController: _tabController,
                       )
