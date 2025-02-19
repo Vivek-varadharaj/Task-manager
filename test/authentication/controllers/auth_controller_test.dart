@@ -3,6 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:task_manager_app/api/api_provider.dart';
 
 import 'package:task_manager_app/features/auth/controllers/auth_controller.dart';
+import 'package:task_manager_app/features/auth/domain/models/login_request_model.dart';
 import 'package:task_manager_app/features/auth/domain/repositories/auth_repository.dart';
 
 class MockAuthRepository extends Mock implements AuthRepository {}
@@ -133,6 +134,37 @@ void main() {
       expect(authController.obsecureText, !initial);
       await authController.toggleObsecureText();
       expect(authController.obsecureText, initial);
+    });
+  });
+
+  group('validatLoginModel', () {
+    test('returns error message when username is empty', () {
+      final loginRequest =
+          LoginRequestModel(username: '', password: 'somepassword');
+      final result = authController.validatLoginModel(loginRequest);
+      expect(result, 'Please enter a username');
+    });
+
+    test('returns error message when password is empty', () {
+      final loginRequest =
+          LoginRequestModel(username: 'someusername', password: '');
+      final result = authController.validatLoginModel(loginRequest);
+      expect(result, 'Please enter a password');
+    });
+
+    test('returns error message for username when both fields are empty', () {
+      final loginRequest = LoginRequestModel(username: '', password: '');
+      final result = authController.validatLoginModel(loginRequest);
+      // Because the check for username emptiness happens first,
+      // it returns the message for username.
+      expect(result, 'Please enter a username');
+    });
+
+    test('returns null when both username and password are provided', () {
+      final loginRequest =
+          LoginRequestModel(username: 'someusername', password: 'somepassword');
+      final result = authController.validatLoginModel(loginRequest);
+      expect(result, isNull);
     });
   });
 }

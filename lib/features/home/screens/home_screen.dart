@@ -98,9 +98,9 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
             controller: _tabController,
             tabs: const [
               Tab(
-                text: 'Online',
+                text: AppTexts.online,
               ),
-              Tab(text: 'Offline'),
+              Tab(text: AppTexts.offline),
             ],
           ),
         ),
@@ -126,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
                                 ),
                                 child: Center(
                                     child: Text(
-                                  "No internet connection",
+                                  AppTexts.noInternetConnection,
                                   style: AppTextStyles.heading3,
                                 )),
                               );

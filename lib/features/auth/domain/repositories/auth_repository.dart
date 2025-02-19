@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_manager_app/api/api_provider.dart';
 
@@ -51,6 +52,7 @@ class AuthRepository {
     try {
       await sharedPreferences.remove(AppConstants.token);
       await sharedPreferences.remove(AppTexts.userData);
+
       return true;
     } catch (e) {
       throw Exception("Error during logout: $e");

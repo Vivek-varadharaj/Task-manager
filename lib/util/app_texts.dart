@@ -13,7 +13,13 @@ class AppTexts {
   static const String save = "Save";
   static const String dueOn = "Due on ";
   static const String noInternetConnection = "No internet connection";
-
+  static const String loginFailed = "Login failed";
+  static const String pleaseEnterUser = "Please enter a username";
+  static const String pleaseEnterPass = "Please enter a password";
+  static const String online = 'Online';
+  static const String offline = 'Offline';
+  static const String logoutDesc = "Are you sure you want to logout?"; 
+  static const String cancel = "Cancel";
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";
   static const String otpVerification = "OTP VERIFICATION";

@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:task_manager_app/common/models/response_model.dart';
+import 'package:task_manager_app/features/auth/domain/models/login_request_model.dart';
 
 import 'package:task_manager_app/features/auth/domain/models/login_response_model.dart';
 import 'package:task_manager_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:task_manager_app/util/app_texts.dart';
 
 class AuthController extends ChangeNotifier {
   final AuthRepository authRepository;
@@ -70,5 +72,16 @@ class AuthController extends ChangeNotifier {
       _obsecureText = !_obsecureText;
       notifyListeners();
     } catch (e) {}
+  }
+
+  String? validatLoginModel(LoginRequestModel loginRequestModel) {
+    String? message;
+    if (loginRequestModel.username.isEmpty) {
+      message = AppTexts.pleaseEnterUser;
+    } else if (loginRequestModel.password.isEmpty) {
+      message = (AppTexts.pleaseEnterPass);
+    }
+
+    return message;
   }
 }

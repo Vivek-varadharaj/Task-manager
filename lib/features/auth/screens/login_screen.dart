@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -162,18 +161,17 @@ class LoginScreen extends StatelessWidget {
 
   loginUsingPassword(
       AuthController authController, BuildContext context) async {
-    if (loginRequestModel.username.isEmpty) {
-      return scaffoldMessengerKey.currentState?.showSnackBar(
-          const SnackBar(content: Text("Please enter a username")));
-    } else if (loginRequestModel.password.isEmpty) {
-      return scaffoldMessengerKey.currentState?.showSnackBar(
-          const SnackBar(content: Text("Please enter a password")));
+    String? message = authController.validatLoginModel(loginRequestModel);
+
+    if (message != null) {
+      return scaffoldMessengerKey.currentState
+          ?.showSnackBar(SnackBar(content: Text(message)));
     } else {
       ResponseModel responseModel = await authController.loginUsingPassword(
           loginRequestModel: loginRequestModel.toJson());
       if (!responseModel.isSuccess) {
-        return scaffoldMessengerKey.currentState?.showSnackBar(
-            SnackBar(content: Text(responseModel.message ?? "Login failed")));
+        return scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
+            content: Text(responseModel.message ?? AppTexts.loginFailed)));
       } else {
         Navigator.pushNamedAndRemoveUntil(
           context,

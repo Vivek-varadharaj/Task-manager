@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:task_manager_app/common/widgets/common_dialog_display.dart';
 import 'package:task_manager_app/common/widgets/custom_appbar.dart';
 import 'package:task_manager_app/features/auth/controllers/auth_controller.dart';
 import 'package:task_manager_app/features/profile/controllers/profile_controller.dart';
@@ -54,16 +57,7 @@ class ProfileScreen extends StatelessWidget {
                   Center(
                     child: TextButton(
                         onPressed: () async {
-                          bool loggedOut = await Provider.of<AuthController>(
-                                  context,
-                                  listen: false)
-                              .logout();
-                          if (loggedOut) {
-                            Navigator.of(context).pushNamedAndRemoveUntil(
-                              Routes.login,
-                              (route) => false,
-                            );
-                          }
+                          showLogoutDialogue(context);
                         },
                         child: Text(
                           AppTexts.logout,
@@ -77,6 +71,43 @@ class ProfileScreen extends StatelessWidget {
           ),
         );
       }),
+    );
+  }
+
+  showLogoutDialogue(
+    BuildContext context,
+  ) {
+    return showGeneralDialog(
+      barrierLabel: AppTexts.logout,
+      barrierDismissible: true,
+      transitionDuration: const Duration(),
+      context: context,
+      transitionBuilder: (ctx, anim1, anim2, child) => BackdropFilter(
+        filter:
+            ImageFilter.blur(sigmaX: 4 * anim1.value, sigmaY: 4 * anim1.value),
+        child: FadeTransition(
+          opacity: anim1,
+          child: child,
+        ),
+      ),
+      pageBuilder: (context, anim1, anim2) {
+        return CommonDialogueDisplay(
+          text: AppTexts.logoutDesc,
+          deleteText: AppTexts.logout,
+          labelText: AppTexts.logout,
+          onOkClick: () async {
+            bool loggedOut =
+                await Provider.of<AuthController>(context, listen: false)
+                    .logout();
+            if (loggedOut) {
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                Routes.login,
+                (route) => false,
+              );
+            }
+          },
+        );
+      },
     );
   }
 }
