@@ -175,7 +175,15 @@ class HomeController extends ChangeNotifier {
     notifyListeners();
   }
 
- 
+  String? validateTodo() {
+    String? message;
+    if (todoController.text.trim().isEmpty) {
+      message = "Please enter todo";
+    } else if (descriptionController.text.isEmpty) {
+      message = "Please enter description";
+    }
+    return message;
+  }
 
   @override
   void dispose() {
