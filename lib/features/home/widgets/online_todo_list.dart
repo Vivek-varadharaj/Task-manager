@@ -137,7 +137,7 @@ class OnlineTodosList extends StatelessWidget {
 
   addOrEditToDo({
     Todo? todo,
-    bool isLocal = true,
+    bool isLocal = false,
     required BuildContext context,
     required TabController tabController,
   }) {
@@ -147,8 +147,6 @@ class OnlineTodosList extends StatelessWidget {
       isForEdit = true;
       Provider.of<HomeController>(context, listen: false).assignValues(todo);
     }
-
-    
 
     showModalBottomSheet(
       isScrollControlled: true,

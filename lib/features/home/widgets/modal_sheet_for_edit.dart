@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -151,6 +153,7 @@ class TodoBottomSheet extends StatelessWidget {
               if (message == null) {
                 ResponseModel responseModel;
                 if (isForEdit) {
+                  log("This is for editing");
                   responseModel =
                       await homeController.editTodo(todo!, isLocal: isLocal);
                 } else {

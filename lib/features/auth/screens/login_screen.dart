@@ -67,7 +67,9 @@ class LoginScreen extends StatelessWidget {
                                 return CustomTextField(
                                   obscureText: authController.obsecureText,
                                   suffixIcon: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      authController.toggleObsecureText();
+                                    },
                                     child: Icon(authController.obsecureText
                                         ? Icons.visibility_off
                                         : Icons.visibility),
@@ -149,7 +151,7 @@ class LoginScreen extends StatelessWidget {
                   ),
                   child: Center(
                       child: Text(
-                    "No internet connection",
+                    AppTexts.noInternetConnection,
                     style: AppTextStyles.heading3,
                   )),
                 );

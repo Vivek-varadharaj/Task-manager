@@ -1,6 +1,6 @@
 class AppTexts {
   static const String login = "Login";
-  static const String letsConenct = "Let’s Connect with Lorem Ipsum..!";
+  static const String letsConenct = "Please login to the app to add Tasks!";
   static const String enterUsername = "Enter Username";
   static const String enterPassword = "Enter Password";
   static const String addTodo = "Add Todo";
@@ -12,6 +12,7 @@ class AppTexts {
   static const String gender = "Gender";
   static const String save = "Save";
   static const String dueOn = "Due on ";
+  static const String noInternetConnection = "No internet connection";
 
   // ///////////////////////////////////////////////////
   static const String continueText = "Continue";

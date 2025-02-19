@@ -104,14 +104,12 @@ class HomeController extends ChangeNotifier {
           todo: todoController.text.trim()));
       if (newTodo != null) {
         if (isLocal) {
-          log("if worked");
           localTodo.removeWhere(
             (element) => element.id == todo.id,
           );
 
           localTodo.insert(0, newTodo);
         } else {
-          log("Else worked");
           todos.removeWhere(
             (element) => element.id == todo.id,
           );
