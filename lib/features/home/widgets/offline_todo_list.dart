@@ -133,6 +133,12 @@ class OfflineTodosList extends StatelessWidget {
                                     )
                                   : null,
                               child: ListTile(
+                                leading: Icon(Icons.circle_outlined,
+                                    color: todo.priority == TodoPriority.high
+                                        ? AppColors.alertRed
+                                        : todo.priority == TodoPriority.medium
+                                            ? AppColors.alertGold
+                                            : AppColors.alertGreen),
                                 trailing: todo.completed == 1
                                     ? const Icon(
                                         Icons.done,

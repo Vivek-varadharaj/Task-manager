@@ -5,6 +5,7 @@ import 'package:task_manager_app/common/models/response_model.dart';
 import 'package:task_manager_app/common/widgets/custom_button.dart';
 import 'package:task_manager_app/common/widgets/custom_text_field.dart';
 import 'package:task_manager_app/features/home/domain/models/todo_model.dart';
+
 import 'package:task_manager_app/util/app_colors.dart';
 import 'package:task_manager_app/util/app_text_styles.dart';
 import 'package:task_manager_app/util/app_texts.dart';
@@ -52,8 +53,23 @@ class TodoBottomSheet extends StatelessWidget {
             children: TodoPriority.values
                 .map(
                   (e) => ChoiceChip(
-                    showCheckmark: false,
-                    label: Text(e.name),
+                    selectedColor: e == TodoPriority.high
+                        ? AppColors.alertRed
+                        : e == TodoPriority.medium
+                            ? AppColors.alertGold
+                            : AppColors.alertGreen,
+                    backgroundColor: e == TodoPriority.high
+                        ? AppColors.alertRed
+                        : e == TodoPriority.medium
+                            ? AppColors.alertGold
+                            : AppColors.alertGreen,
+                    showCheckmark: true,
+                    checkmarkColor: AppColors.neutral0,
+                    label: Text(
+                      e.name,
+                      style: AppTextStyles.latoPara
+                          .copyWith(color: AppColors.neutral0),
+                    ),
                     selected: homeController.priority == e,
                     onSelected: (value) {
                       homeController.togglePriority(e);
@@ -111,25 +127,44 @@ class TodoBottomSheet extends StatelessWidget {
             ),
           ),
           SizedBox(height: Dimensions.paddingSizeDefault),
+          Consumer<HomeController>(
+            builder: (context, homeController, child) =>
+                homeController.message != null
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        child: Text(
+                          homeController.message ?? "",
+                          style: AppTextStyles.latoPara
+                              .copyWith(color: AppColors.alertRed),
+                        ),
+                      )
+                    : const SizedBox(),
+          ),
           CustomButton(
             isLoading: homeController.isButtonLoading,
             title: isForEdit ? AppTexts.save : AppTexts.add,
             onTap: () async {
-              ResponseModel responseModel;
-              if (isForEdit) {
-                responseModel =
-                    await homeController.editTodo(todo!, isLocal: isLocal);
-              } else {
-                responseModel = await homeController.addTodo();
-                tabController.index = 1;
-              }
+              String? message =
+                  Provider.of<HomeController>(context, listen: false)
+                      .validateTodo();
 
-              if (responseModel.isSuccess) {
-                Navigator.of(context).pop();
-              } else {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(responseModel.message ?? "Failed")),
-                );
+              if (message == null) {
+                ResponseModel responseModel;
+                if (isForEdit) {
+                  responseModel =
+                      await homeController.editTodo(todo!, isLocal: isLocal);
+                } else {
+                  responseModel = await homeController.addTodo();
+                  tabController.index = 1;
+                }
+
+                if (responseModel.isSuccess) {
+                  Navigator.of(context).pop();
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text(responseModel.message ?? "Failed")),
+                  );
+                }
               }
             },
           ),

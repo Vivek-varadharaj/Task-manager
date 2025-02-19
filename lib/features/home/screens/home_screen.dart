@@ -142,22 +142,16 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       isForEdit = true;
       Provider.of<HomeController>(context, listen: false).assignValues(todo);
     }
-    String? message =
-        Provider.of<HomeController>(context, listen: false).validateTodo();
-    if (message == null) {
-      showModalBottomSheet(
-        isScrollControlled: true,
-        context: context,
-        builder: (context) => TodoBottomSheet(
-          isForEdit: isForEdit,
-          isLocal: isLocal,
-          tabController: tabController,
-          todo: todo,
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(message)));
-    }
+
+    showModalBottomSheet(
+      isScrollControlled: true,
+      context: context,
+      builder: (context) => TodoBottomSheet(
+        isForEdit: isForEdit,
+        isLocal: isLocal,
+        tabController: tabController,
+        todo: todo,
+      ),
+    );
   }
 }

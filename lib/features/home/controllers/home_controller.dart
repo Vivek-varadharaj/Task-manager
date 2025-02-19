@@ -20,6 +20,7 @@ class HomeController extends ChangeNotifier {
   bool hasMore = true;
   TodoPriority priority = TodoPriority.high;
   DateTime dueDate = DateTime.now();
+  String? message;
 
   late ScrollController scrollController;
   late ScrollController offlineScrollController;
@@ -175,12 +176,14 @@ class HomeController extends ChangeNotifier {
   }
 
   String? validateTodo() {
-    String? message;
+    message = null;
+    notifyListeners();
     if (todoController.text.trim().isEmpty) {
       message = "Please enter todo";
     } else if (descriptionController.text.isEmpty) {
       message = "Please enter description";
     }
+    notifyListeners();
     return message;
   }
 
