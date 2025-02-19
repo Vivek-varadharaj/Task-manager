@@ -8,7 +8,7 @@ import 'package:task_manager_app/util/app_colors.dart';
 import 'package:task_manager_app/util/app_text_styles.dart';
 import 'package:task_manager_app/util/dimensions.dart';
 import 'package:collection/collection.dart';
-import 'package:intl/intl.dart'; // Import the intl package for date formatting
+import 'package:intl/intl.dart'; 
 
 class OfflineTodosList extends StatelessWidget {
   const OfflineTodosList({super.key, required this.tabController});
