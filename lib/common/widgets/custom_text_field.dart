@@ -33,24 +33,31 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: const BoxDecoration(
           border: Border(bottom: BorderSide(color: AppColors.neutral10))),
       padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 6),
-      child: TextField(
-          style: AppTextStyles.heading7
-              .copyWith(fontSize: Dimensions.fontSizeDefault),
-          obscureText: widget.obscureText,
-          keyboardType: widget.textInputType,
-          onChanged: widget.onChanged,
-          controller: widget.controller,
-          scrollPadding: EdgeInsets.zero,
-          decoration: InputDecoration(
-            contentPadding: const EdgeInsets.only(bottom: -10.0),
-            suffixIconConstraints: const BoxConstraints(maxHeight: 14),
-            suffixIcon: widget.suffixIcon,
-            isCollapsed: true,
-            hintText: widget.hintText,
-            hintStyle: AppTextStyles.heading7.copyWith(
-                color: widget.textColor, fontSize: Dimensions.fontSizeDefault),
-            border: InputBorder.none,
-          )),
+      child: Row(
+        children: [
+          Expanded(
+            child: TextField(
+                style: AppTextStyles.heading7
+                    .copyWith(fontSize: Dimensions.fontSizeDefault),
+                obscureText: widget.obscureText,
+                keyboardType: widget.textInputType,
+                onChanged: widget.onChanged,
+                controller: widget.controller,
+                scrollPadding: EdgeInsets.zero,
+                decoration: InputDecoration(
+                  contentPadding: const EdgeInsets.only(bottom: -10.0),
+                  suffixIconConstraints: const BoxConstraints(maxHeight: 14),
+                  isCollapsed: true,
+                  hintText: widget.hintText,
+                  hintStyle: AppTextStyles.heading7.copyWith(
+                      color: widget.textColor,
+                      fontSize: Dimensions.fontSizeDefault),
+                  border: InputBorder.none,
+                )),
+          ),
+          if (widget.suffixIcon != null) widget.suffixIcon!,
+        ],
+      ),
     );
   }
 }
