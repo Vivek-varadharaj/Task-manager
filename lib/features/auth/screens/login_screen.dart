@@ -66,6 +66,7 @@ class LoginScreen extends StatelessWidget {
                                 return CustomTextField(
                                   obscureText: authController.obsecureText,
                                   suffixIcon: InkWell(
+                                    
                                     onTap: () {
                                       authController.toggleObsecureText();
                                     },
