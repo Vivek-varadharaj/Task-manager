@@ -22,110 +22,102 @@ class OnlineTodosList extends StatelessWidget {
         : Column(
             children: [
               Expanded(
-                child: homeController.isButtonLoading
-                    ? const Center(
-                        child: CircularProgressIndicator(
-                            color: AppColors.neutral0))
-                    : ListView.separated(
-                        padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
-                        separatorBuilder: (context, index) =>
-                            SizedBox(height: Dimensions.paddingSizeDefault),
-                        controller: homeController.scrollController,
-                        itemCount: homeController.todos.length,
-                        itemBuilder: (context, index) {
-                          return Slidable(
-                            key: ValueKey(homeController.todos[index].id),
-                            startActionPane: ActionPane(
-                              dragDismissible: false,
-                              motion: const StretchMotion(),
-                              dismissible: DismissiblePane(onDismissed: () {
-                                homeController
-                                    .deleteTodo(homeController.todos[index].id);
-                              }),
-                              children: [
-                                SlidableAction(
-                                  onPressed: (context) {
-                                    homeController.deleteTodo(
-                                        homeController.todos[index].id);
-                                  },
-                                  backgroundColor: AppColors.alertRed,
-                                  foregroundColor: AppColors.neutral0,
-                                  icon: Icons.delete,
-                                  label: 'Delete',
-                                ),
-                              ],
-                            ),
-                            endActionPane: (homeController
-                                        .todos[index].completed ==
-                                    0)
-                                ? ActionPane(
-                                    dragDismissible: false,
-                                    motion: const StretchMotion(),
-                                    children: [
-                                      SlidableAction(
-                                        onPressed: (context) {
-                                          addOrEditToDo(
-                                            todo: homeController.todos[index],
-                                            tabController: tabController,
-                                            context: context,
-                                          );
-                                        },
-                                        backgroundColor: AppColors.alertGold,
-                                        foregroundColor: AppColors.neutral0,
-                                        icon: Icons.edit,
-                                        label: 'Edit',
-                                      ),
-                                      SlidableAction(
-                                        onPressed: (context) {
-                                          homeController.assignValues(
-                                              homeController.todos[index]);
-                                          homeController.editTodo(
-                                            homeController.todos[index]
-                                                .copyWith(completed: 1),
-                                          );
-                                        },
-                                        backgroundColor: AppColors.alertGreen,
-                                        foregroundColor: AppColors.neutral0,
-                                        icon: Icons.done,
-                                        label: 'Complete',
-                                      ),
-                                    ],
-                                  )
-                                : null,
-                            child: ListTile(
-                              trailing:
-                                  homeController.todos[index].completed == 1
-                                      ? const Icon(
-                                          Icons.done,
-                                          color: AppColors.neutral0,
-                                        )
-                                      : const SizedBox(),
-                              onTap: () {
-                                addOrEditToDo(
-                                    context: context,
-                                    tabController: tabController,
-                                    isLocal: false,
-                                    todo: homeController.todos[index]);
-                              },
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.radiusDefault),
-                              ),
-                              tileColor:
-                                  homeController.todos[index].completed == 1
-                                      ? AppColors.alertGreen.withOpacity(0.65)
-                                      : AppColors.primary100.withOpacity(0.65),
-                              title: Text(homeController.todos[index].todo,
-                                  style: AppTextStyles.para2.copyWith(
-                                      color: (homeController
-                                                  .todos[index].completed ==
-                                              0)
-                                          ? AppColors.neutral100
-                                          : AppColors.neutral0)),
-                            ),
-                          );
-                        },
+                child: ListView.separated(
+                  padding: EdgeInsets.all(Dimensions.paddingSizeLarge),
+                  separatorBuilder: (context, index) =>
+                      SizedBox(height: Dimensions.paddingSizeDefault),
+                  controller: homeController.scrollController,
+                  itemCount: homeController.todos.length,
+                  itemBuilder: (context, index) {
+                    return Slidable(
+                      key: ValueKey(homeController.todos[index].id),
+                      startActionPane: ActionPane(
+                        dragDismissible: false,
+                        motion: const StretchMotion(),
+                        dismissible: DismissiblePane(onDismissed: () {
+                          homeController
+                              .deleteTodo(homeController.todos[index].id);
+                        }),
+                        children: [
+                          SlidableAction(
+                            onPressed: (context) {
+                              homeController
+                                  .deleteTodo(homeController.todos[index].id);
+                            },
+                            backgroundColor: AppColors.alertRed,
+                            foregroundColor: AppColors.neutral0,
+                            icon: Icons.delete,
+                            label: 'Delete',
+                          ),
+                        ],
                       ),
+                      endActionPane:
+                          (homeController.todos[index].completed == 0)
+                              ? ActionPane(
+                                  dragDismissible: false,
+                                  motion: const StretchMotion(),
+                                  children: [
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        addOrEditToDo(
+                                          todo: homeController.todos[index],
+                                          tabController: tabController,
+                                          context: context,
+                                        );
+                                      },
+                                      backgroundColor: AppColors.alertGold,
+                                      foregroundColor: AppColors.neutral0,
+                                      icon: Icons.edit,
+                                      label: 'Edit',
+                                    ),
+                                    SlidableAction(
+                                      onPressed: (context) {
+                                        homeController.assignValues(
+                                            homeController.todos[index]);
+                                        homeController.editTodo(
+                                          homeController.todos[index]
+                                              .copyWith(completed: 1),
+                                        );
+                                      },
+                                      backgroundColor: AppColors.alertGreen,
+                                      foregroundColor: AppColors.neutral0,
+                                      icon: Icons.done,
+                                      label: 'Complete',
+                                    ),
+                                  ],
+                                )
+                              : null,
+                      child: ListTile(
+                        trailing: homeController.todos[index].completed == 1
+                            ? const Icon(
+                                Icons.done,
+                                color: AppColors.neutral0,
+                              )
+                            : const SizedBox(),
+                        onTap: () {
+                          addOrEditToDo(
+                              context: context,
+                              tabController: tabController,
+                              isLocal: false,
+                              todo: homeController.todos[index]);
+                        },
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.radiusDefault),
+                        ),
+                        tileColor: homeController.todos[index].completed == 1
+                            ? AppColors.alertGreen.withOpacity(0.65)
+                            : AppColors.primary100.withOpacity(0.65),
+                        title: Text(homeController.todos[index].todo,
+                            style: AppTextStyles.para2.copyWith(
+                                color:
+                                    (homeController.todos[index].completed == 0)
+                                        ? AppColors.neutral100
+                                        : AppColors.neutral0)),
+                      ),
+                    );
+                  },
+                ),
               ),
               if (homeController.isLoading)
                 const Center(
