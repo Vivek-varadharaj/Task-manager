@@ -65,11 +65,11 @@ class LoginScreen extends StatelessWidget {
                                   builder: (context, authController, child) {
                                 return CustomTextField(
                                   obscureText: authController.obsecureText,
-                                  suffixIcon: InkWell(
-                                    onTap: () {
+                                  suffixIcon: IconButton(
+                                    onPressed: () {
                                       authController.toggleObsecureText();
                                     },
-                                    child: Icon(authController.obsecureText
+                                    icon: Icon(authController.obsecureText
                                         ? Icons.visibility_off
                                         : Icons.visibility),
                                   ),
