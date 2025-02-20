@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:task_manager_app/features/auth/controllers/auth_controller.dart';
 import 'package:task_manager_app/helper/app_routes.dart';
+import 'package:task_manager_app/util/images.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,12 +15,13 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    navigate();
+    WidgetsBinding.instance.addPostFrameCallback((d) {
+      navigate();
+    });
   }
 
   navigate() async {
     final authController = Provider.of<AuthController>(context, listen: false);
-    await Future.delayed(const Duration(seconds: 2));
 
     String? token = authController.getIsUserLoggedIn();
 
@@ -45,9 +47,13 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text("Splash"),
+        child: Image.asset(
+          Images.logo,
+          height: 80,
+          width: 80,
+        ),
       ),
     );
   }
